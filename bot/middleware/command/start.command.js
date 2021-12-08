@@ -8,24 +8,37 @@ module.exports = bot.start(async (ctx) => {
       await db.sync();
 
       const startPayload = ctx.startPayload;
-      const chatID = ctx.chat.id;
-      const firstName = ctx.chat.first_name;
-      const lastName = ctx.chat.last_name;
+      const telegram_id = ctx.chat.id;
+      const first_name = ctx.chat.first_name;
+      const last_name = ctx.chat.last_name;
       const username = ctx.chat.username;
 
-      // const foundUser = await UserModel.findOne({where:{chatID:ctx.chat.id}});
-      // if (!foundUser) {
-      //    await UserModel.create({
-      //       chatID: chatID,
-      //       firstName: firstName,
-      //       lastName: lastName,
-      //       username: username,
-      //       admin: false,
-      //       startPayload: startPayload
-      //    });
-      // }
+      const foundUser = await UserModel.findOne({where:{telegram_id:ctx.chat.id}});
+      if (foundUser && startPayload) {
+         await UserModel.update({ startPayload: startPayload }, {
+            where: {
+               telegram_id:ctx.chat.id
+            }
+         })
+            .then((res) => {
+                console.log('User updated')
+            })
+      }
 
-      return ctx.replyWithHTML(`Hi, <b>${firstName}</b>!`);
+      if (!foundUser) {
+         await UserModel.create({
+            username: username,
+            telegram_id: telegram_id,
+            first_name: first_name,
+            last_name: last_name,
+            balance: 0,
+            startPayload: startPayload,
+         });
+         await console.log('User added to DB')
+      }
+
+
+      return ctx.replyWithHTML(`Hi, <b>${first_name}</b>!`);
    } catch (e) {
       console.log(e);
    }
