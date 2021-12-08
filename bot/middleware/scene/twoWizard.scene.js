@@ -2,6 +2,7 @@ const { Markup, Scenes, Composer } = require("telegraf");
 
 const startStep = new Composer();
 startStep.hears("two", async (ctx) => {
+   await console.log('start scene two')
    try {
       ctx.wizard.state.formData = {};
       await ctx.reply("oneMessage", {

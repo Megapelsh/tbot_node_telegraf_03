@@ -1,15 +1,31 @@
 require("dotenv").config();
 const Sequelize = require("sequelize");
 
-const db = new Sequelize(
-   process.env.POSTGRES_DATABASE,
-   process.env.POSTGRES_USERNAME,
-   process.env.POSTGRES_PASSWORD,
-   {
-      host: process.env.POSTGRES_HOST,
-      port: Number(process.env.POSTGRES_PORT),
-      dialect: process.env.POSTGRES_DIALECT
-   }
+const DATABASE = new Sequelize(
+    process.env.DB_NAME,
+    process.env.DB_USER,
+    process.env.DB_PASSWORD,
+    {
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT,
+        dialect: process.env.DB_DIALECT,
+        pool: {
+            max: 5,
+            min: 0,
+            acquire: 30000,
+            idle: 10000
+        },
+    }
 );
 
-module.exports = db;
+DATABASE.authenticate()
+    .then(() => console.log('Connected to DB.'))
+    .catch((err) => console.error('DB connection error: ', err))
+
+// sequelize.close()
+//     .then(() => console.log('Closed.'))
+//     .catch((err) =>
+//         console.error('Close connection error: ', err)
+//     )
+
+module.exports = DATABASE;

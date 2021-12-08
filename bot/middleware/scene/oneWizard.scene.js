@@ -7,7 +7,7 @@ startStep.hears("one", async (ctx) => {
       await ctx.reply("oneMessage", {
          reply_markup: {
             "inline_keyboard": [
-               [Markup.button.callback("ok", "ok")]
+               [Markup.button.callback("ok", "ok")],
             ]
          }
       });

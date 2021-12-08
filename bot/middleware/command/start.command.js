@@ -5,7 +5,7 @@ const UserModel = require("../../model/user.model");
 
 module.exports = bot.start(async (ctx) => {
    try {
-      // await db.sync();
+      await db.sync();
 
       const startPayload = ctx.startPayload;
       const chatID = ctx.chat.id;
