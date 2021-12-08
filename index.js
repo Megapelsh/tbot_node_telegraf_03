@@ -18,3 +18,7 @@ require("./bot/middleware/hears/two.hears");
 // CONNECTION
 require("./bot/connection/local.connection");
 // require("./bot/connection/lambda.connection");
+
+// Enable graceful stop
+process.once('SIGINT', () => bot.stop('SIGINT'))
+process.once('SIGTERM', () => bot.stop('SIGTERM'))
