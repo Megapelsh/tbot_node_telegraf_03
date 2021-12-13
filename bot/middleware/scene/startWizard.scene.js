@@ -57,16 +57,33 @@ registerUser.on("contact", async (ctx) => {
         let url = `https://multicode.eu/mapi.php?f=McCode_Add&out=json&dt[userID]=23&dt[url]=${phoneNum}&dt[name]=${phoneNum}&`;
         let username = process.env.MULTICODE_LOGIN;
         let password = process.env.MULTICODE_PASSWORD;
-
+        let qrCode = {};
         await fetch(url, {
             method:'GET',
             headers: {
                 'Authorization': 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64')
             }})
             .then(response => response.json())
-            .then(json => console.log(json))
+            .then(json => {
+                qrCode = json;
+                console.log(json.QR, json.ID);
+            })
             .catch(await function () {
-                console.log('fetch error')
+                console.log('fetch error');
+            })
+
+        await console.log(qrCode);
+
+        let urlGetQR =`https://multicode.eu/qrCode/?f=p&data=https://dsqr.eu/?q=${qrCode.QR}`;
+
+        await fetch(urlGetQR)
+            .then(response => {
+                ctx.reply('Твій код:');
+                ctx.replyWithPhoto(response);
+                console.log('pic sent');
+            })
+            .catch(await function () {
+                console.log('fetch error');
             })
 
 
