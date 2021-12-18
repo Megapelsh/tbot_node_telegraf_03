@@ -50,7 +50,8 @@ registerUser.on("contact", async (ctx) => {
         // ctx.wizard.state.formData.phone = ctx.message.contact.phone_number;
         // await ctx.replyWithHTML("I have your phone number!");
 
-        let url = `https://multicode.eu/mapi.php?f=McCode_Add&out=json&dt[userID]=23&dt[url]=${phoneNum}&dt[name]=${phoneNum}&`;
+        let targetUrl = `http://docmyjournal.zorind.com?event=${ctx.wizard.state.formData.startPayload}&access=Ne_bazhano`
+        let url = `https://multicode.eu/mapi.php?f=McCode_Add&out=json&dt[userID]=23&dt[url]=${targetUrl}&dt[name]=${phoneNum}&`;
         let username = process.env.MULTICODE_LOGIN;
         let password = process.env.MULTICODE_PASSWORD;
         let qrCode = {};
@@ -64,7 +65,7 @@ registerUser.on("contact", async (ctx) => {
                 qrCode = json;
             })
             .catch(await function () {
-                console.log('fetch error');
+                console.log('!!! create QRcode fetch error');
             })
 
         url = `https://multicode.eu/mapi.php?f=McCode_Activate&out=json&dt[qrID]=${qrCode.ID}&dt[activate]=Y`;
@@ -73,12 +74,14 @@ registerUser.on("contact", async (ctx) => {
             headers: {
                 'Authorization': 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64')
             }})
-            .then(response => response.json())
-            .then(json => {
-                console.log(json);
-            })
-            .catch(await function () {
-                console.log('fetch error');
+            // .then(response => response.json())
+            // .then(json => {
+            //     console.log(json);
+            // })
+            .catch(async function (e) {
+                await console.log('!!! activate QRcode fetch error');
+                await console.log(e);
+                await console.log('---------------');
             })
 
         let urlGetQR =`https://multicode.eu/qrCode/?f=p&data=https://dsqr.eu/?q=${qrCode.QR}`;
@@ -88,8 +91,10 @@ registerUser.on("contact", async (ctx) => {
                 ctx.replyWithPhoto(response);
                 console.log('pic sent');
             })
-            .catch(await function () {
-                console.log('fetch error');
+            .catch(async function (e) {
+                await console.log('!!! get QRcode pic fetch error');
+                await console.log(e);
+                await console.log('---------------');
             })
 
 
