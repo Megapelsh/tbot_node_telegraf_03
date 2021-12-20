@@ -47,10 +47,11 @@ registerUser.on("contact", async (ctx) => {
     try {
         const receivedPhoneNum = ctx.message.contact.phone_number;
         const phoneNum = receivedPhoneNum.replace(/[^0-9]/g, '');
+        const event = ctx.wizard.state.formData.startPayload ? ctx.wizard.state.formData.startPayload : '***';
         // ctx.wizard.state.formData.phone = ctx.message.contact.phone_number;
         // await ctx.replyWithHTML("I have your phone number!");
 
-        let targetUrl = `http://docmyjournal.zorind.com?event=${ctx.wizard.state.formData.startPayload}&access=Ne_bazhano`
+        let targetUrl = `http://docmyjournal.zorind.com?event=${event}&access=denied`
         let url = `https://multicode.eu/mapi.php?f=McCode_Add&out=json&dt[userID]=23&dt[url]=${targetUrl}&dt[name]=${phoneNum}&`;
         let username = process.env.MULTICODE_LOGIN;
         let password = process.env.MULTICODE_PASSWORD;
@@ -75,6 +76,7 @@ registerUser.on("contact", async (ctx) => {
                 'Authorization': 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64')
             }})
             // .then(response => response.json())
+            .then(response => console.log(response.status))
             // .then(json => {
             //     console.log(json);
             // })
