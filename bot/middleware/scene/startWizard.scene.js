@@ -24,7 +24,7 @@ startStep.start( async (ctx) => {
                     }
                 ]
             ]).oneTime().resize());
-            // *** add user to DB
+            // // *** add user to DB
             // await UserModel.create({
             //     username: ctx.chat.username,
             //     telegram_id: ctx.chat.id,
@@ -51,7 +51,7 @@ registerUser.on("contact", async (ctx) => {
         // ctx.wizard.state.formData.phone = ctx.message.contact.phone_number;
         // await ctx.replyWithHTML("I have your phone number!");
 
-        let targetUrl = `http://docmyjournal.zorind.com?event=${event}&access=denied`
+        let targetUrl = `http://docmyjournal.zorind.com?event=${event}`
         let url = `https://multicode.eu/mapi.php?f=McCode_Add&out=json&dt[userID]=23&dt[url]=${targetUrl}&dt[name]=${phoneNum}&`;
         let username = process.env.MULTICODE_LOGIN;
         let password = process.env.MULTICODE_PASSWORD;
@@ -85,6 +85,21 @@ registerUser.on("contact", async (ctx) => {
                 await console.log(e);
                 await console.log('---------------');
             })
+
+
+        // *** add user to DB
+        await UserModel.create({
+            username: ctx.chat.username,
+            telegram_id: ctx.chat.id,
+            first_name: ctx.chat.first_name,
+            last_name: ctx.chat.last_name,
+            phone: phoneNum,
+            balance: 0,
+            qrcode: qrCode.QR,
+            startPayload: ctx.wizard.state.formData.startPayload,
+        });
+        await console.log('User added to DB')
+
 
         let urlGetQR =`https://multicode.eu/qrCode/?f=p&data=https://dsqr.eu/?q=${qrCode.QR}`;
         await fetch(urlGetQR)
