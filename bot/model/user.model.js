@@ -27,6 +27,9 @@ module.exports = db.define("user",
        qrcode: {
            type: DataTypes.STRING,
        },
+       qrcodeID: {
+           type: DataTypes.INTEGER,
+       },
        user_group: {
            type: DataTypes.STRING,
        },

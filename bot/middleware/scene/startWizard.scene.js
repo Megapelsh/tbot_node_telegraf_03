@@ -27,7 +27,8 @@ startStep.start( async (ctx) => {
             return ctx.wizard.next();
         }
 
-
+        ctx.wizard.state.formData.qrcode = foundUser.qrcode;
+        ctx.wizard.state.formData.qrcodeID = foundUser.qrcodeID;
         return ctx.wizard.selectStep(2);
     } catch (e) {
         console.log(e);
@@ -59,6 +60,8 @@ registerUser.on("contact", async (ctx) => {
                 console.log('!!! create QRcode fetch error');
             })
 
+        ctx.wizard.state.formData.qrcodeID = qrCode.ID;
+
         url = `https://multicode.eu/mapi.php?f=McCode_Activate&out=json&dt[qrID]=${qrCode.ID}&dt[activate]=Y`;
         await fetch(url, {
             method:'GET',
@@ -84,6 +87,7 @@ registerUser.on("contact", async (ctx) => {
             phone: phoneNum,
             balance: 0,
             qrcode: qrCode.QR,
+            qrcodeID: ctx.wizard.state.formData.qrcodeID,
             startPayload: ctx.wizard.state.formData.startPayload,
         });
         await console.log('User added to DB')
@@ -126,6 +130,30 @@ const finishStep = new Composer();
 finishStep.hears("ok", async (ctx) => {
     try {
         // тут треба написати отримання QR юзера з бази і змінити посилання у кодові
+        await console.log(ctx.wizard.state.formData.qrcode);
+        await console.log(ctx.wizard.state.formData.qrCodeID);
+        let targetUrl = `http://docmyjournal.zorind.com?event=${ctx.wizard.state.formData.startPayload}`;
+        let url = `https://multicode.eu/mapi.php?f=McCode_Update&out=json&dt[userID]=23&dt[qrID]=${ctx.wizard.state.formData.qrcodeID}&dt[url]=${targetUrl}`;
+        let username = process.env.MULTICODE_LOGIN;
+        let password = process.env.MULTICODE_PASSWORD;
+        await console.log(url);
+        await fetch(url, {
+            method:'GET',
+            headers: {
+                'Authorization': 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64')
+            }})
+            .then(response => console.log(response))
+            // .then(response => response.json())
+            // .then(json => {
+            //     qrCode = json;
+            // })
+            .catch(await function () {
+                console.log('!!! update QRcode fetch error');
+            })
+
+
+
+
         // await ctx.answerCbQuery();
         await ctx.reply("ok");
         return ctx.scene.leave();
