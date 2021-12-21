@@ -24,19 +24,11 @@ startStep.start( async (ctx) => {
                     }
                 ]
             ]).oneTime().resize());
-            // // *** add user to DB
-            // await UserModel.create({
-            //     username: ctx.chat.username,
-            //     telegram_id: ctx.chat.id,
-            //     first_name: ctx.chat.first_name,
-            //     last_name: ctx.chat.last_name,
-            //     balance: 0,
-            //     startPayload: ctx.startPayload,
-            // });
-            // await console.log('User added to DB')
+            return ctx.wizard.next();
         }
 
-        return ctx.wizard.next();
+
+        return ctx.wizard.selectStep(2);
     } catch (e) {
         console.log(e);
     }
@@ -48,8 +40,6 @@ registerUser.on("contact", async (ctx) => {
         const receivedPhoneNum = ctx.message.contact.phone_number;
         const phoneNum = receivedPhoneNum.replace(/[^0-9]/g, '');
         const event = ctx.wizard.state.formData.startPayload ? ctx.wizard.state.formData.startPayload : '***';
-        // ctx.wizard.state.formData.phone = ctx.message.contact.phone_number;
-        // await ctx.replyWithHTML("I have your phone number!");
 
         let targetUrl = `http://docmyjournal.zorind.com?event=${event}`
         let url = `https://multicode.eu/mapi.php?f=McCode_Add&out=json&dt[userID]=23&dt[url]=${targetUrl}&dt[name]=${phoneNum}&`;
@@ -76,10 +66,8 @@ registerUser.on("contact", async (ctx) => {
                 'Authorization': 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64')
             }})
             // .then(response => response.json())
-            .then(response => console.log(response.status))
-            // .then(json => {
-            //     console.log(json);
-            // })
+            .then(response => console.log(`QRcode activation status ${response.status}`))
+
             .catch(async function (e) {
                 await console.log('!!! activate QRcode fetch error');
                 await console.log(e);
@@ -116,26 +104,28 @@ registerUser.on("contact", async (ctx) => {
 
 
         return ctx.scene.leave();
-    } catch (e) {
+    }
+    catch (e) {
         console.log(e);
     }
 });
 
 const finishStep = new Composer();
-finishStep.on("contact", async (ctx) => {
+// finishStep.on("contact", async (ctx) => {
+//     try {
+//         // const receivedPhoneNum = ctx.message.contact.phone_number;
+//         // const phoneNum = receivedPhoneNum.replace(/[^0-9]/g, '');
+//         // ctx.wizard.state.formData.phone = ctx.message.contact.phone_number;
+//         // await ctx.replyWithHTML("I have your phone number!");
+//
+//         return ctx.scene.leave();
+//     } catch (e) {
+//         console.log(e);
+//     }
+// });
+finishStep.hears("ok", async (ctx) => {
     try {
-        // const receivedPhoneNum = ctx.message.contact.phone_number;
-        // const phoneNum = receivedPhoneNum.replace(/[^0-9]/g, '');
-        // ctx.wizard.state.formData.phone = ctx.message.contact.phone_number;
-        // await ctx.replyWithHTML("I have your phone number!");
-
-        return ctx.scene.leave();
-    } catch (e) {
-        console.log(e);
-    }
-});
-finishStep.action("ok", async (ctx) => {
-    try {
+        // тут треба написати отримання QR юзера з бази і змінити посилання у кодові
         // await ctx.answerCbQuery();
         await ctx.reply("ok");
         return ctx.scene.leave();
