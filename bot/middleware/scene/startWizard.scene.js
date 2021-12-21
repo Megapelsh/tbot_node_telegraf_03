@@ -129,24 +129,16 @@ const finishStep = new Composer();
 // });
 finishStep.hears("ok", async (ctx) => {
     try {
-        // тут треба написати отримання QR юзера з бази і змінити посилання у кодові
-        await console.log(ctx.wizard.state.formData.qrcode);
-        await console.log(ctx.wizard.state.formData.qrCodeID);
         let targetUrl = `http://docmyjournal.zorind.com?event=${ctx.wizard.state.formData.startPayload}`;
         let url = `https://multicode.eu/mapi.php?f=McCode_Update&out=json&dt[userID]=23&dt[qrID]=${ctx.wizard.state.formData.qrcodeID}&dt[url]=${targetUrl}`;
         let username = process.env.MULTICODE_LOGIN;
         let password = process.env.MULTICODE_PASSWORD;
-        await console.log(url);
         await fetch(url, {
             method:'GET',
             headers: {
                 'Authorization': 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64')
             }})
-            .then(response => console.log(response))
-            // .then(response => response.json())
-            // .then(json => {
-            //     qrCode = json;
-            // })
+            .then(response => console.log(`*** Update Qrcode status: ${response.status}`))
             .catch(await function () {
                 console.log('!!! update QRcode fetch error');
             })
