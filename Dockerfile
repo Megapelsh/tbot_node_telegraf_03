@@ -8,7 +8,8 @@ WORKDIR /usr/src/app
 # скопировать оба файла: package.json и package-lock.json
 COPY package*.json ./
 
-RUN npm install
+# RUN npm install
+RUN npm ci --only=production
 # Если вы создаете сборку для продакшн
 # RUN npm ci --only=production
 
@@ -16,4 +17,4 @@ RUN npm install
 COPY . .
 
 # EXPOSE 8090
-# CMD [ "node", "index.js" ]
+CMD [ "node", "index.js" ]
