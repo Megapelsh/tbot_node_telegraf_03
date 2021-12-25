@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - data:/var/lib/mysql
+    env_file:
+      - .env
+    ports:
+      - 3306:3306
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    environment:
+      - PMA_HOST=mysql
+    depends_on:
+      - mysql
+    ports:
+      - 40001:80
+
+  api:
+    build: api/
+    restart: always
+    ports:
+      - 80:8090
+
+  bot:
+    build: .
+    restart: always
+    depends_on:
+      - mysql
+
+volumes:
+  data:
