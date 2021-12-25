@@ -31,6 +31,8 @@ services:
     build: .
     depends_on:
       - mysql
+    env_file:
+      - .env
 
 volumes:
   data:
