@@ -5,7 +5,7 @@ http.createServer((request, response) => {
     let urlRequest = url.parse(request.url, true);
     let event = urlRequest.query.event ? urlRequest.query.event : '***';
     let access = 'Заборонено!'
-    if (urlRequest.query.access == 'granted') {
+    if (urlRequest.query.access === 'granted') {
         access = 'Дозволено';
     }
 
