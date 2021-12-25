@@ -29,9 +29,10 @@ services:
 
   bot:
     build: .
-    restart: always
     depends_on:
       - mysql
+    command:
+      - npm run start
 
 volumes:
   data:
