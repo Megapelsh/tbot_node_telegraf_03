@@ -34,8 +34,9 @@ startStep.start( async (ctx) => {
         }
 
         if (!ctx.startPayload) {
+
+            // await ctx.scene.leave();
             await ctx.reply("Обери бажану дію");
-            await ctx.scene.leave();
         }
 
         // console.log(foundUser);

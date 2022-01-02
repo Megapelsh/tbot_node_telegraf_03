@@ -1,31 +1,25 @@
 const { Markup, Scenes, Composer } = require("telegraf");
 
-// const startStep = new Composer();
-// startStep.command( "admin", async (ctx) => {
-//     await console.log('start scene two')
-//     try {
-//         ctx.wizard.state.formData = {};
-//         await ctx.reply("oneMessage", {
-//             reply_markup: {
-//                 "inline_keyboard": [
-//                     [Markup.button.callback("yes-ok", "ok")],
-//                     [Markup.button.callback("changed_my_mind", "changed_my_mind")]
-//                 ]
-//             }
-//         });
-//         return ctx.wizard.next();
-//     } catch (e) {
-//         console.log(e);
-//     }
-// });
+const startStep = new Composer();
+startStep.command( "admin", async (ctx) => {
+    await console.log('adminScene start')
+    try {
+        ctx.wizard.state.formData = {};
+        await ctx.reply("adminScene message", {
+            reply_markup: {
+                "inline_keyboard": [
+                    [Markup.button.callback("yes-ok", "ok")],
+                    [Markup.button.callback("changed_my_mind", "changed_my_mind")]
+                ]
+            }
+        });
+        return ctx.wizard.next();
+    } catch (e) {
+        console.log(e);
+    }
+});
 
 const finishStep = new Composer();
-console.log('start scene admin')
-
-finishStep.hears('ss', async ctx => {
-    await ctx.reply('fff');
-})
-
 finishStep.action("changed_my_mind", async (ctx) => {
     try {
         await ctx.answerCbQuery();
@@ -45,5 +39,5 @@ finishStep.action("ok", async (ctx) => {
     }
 });
 
-// module.exports = new Scenes.WizardScene("adminWizard", startStep, finishStep);
-module.exports = new Scenes.WizardScene("adminWizard", finishStep);
+module.exports = new Scenes.WizardScene("adminWizard", startStep, finishStep);
+// module.exports = new Scenes.WizardScene("adminWizard", finishStep);
