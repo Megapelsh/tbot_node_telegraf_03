@@ -2,6 +2,7 @@ const { Markup, Scenes, Composer } = require("telegraf");
 const UserModel = require("../../model/user.model");
 const db = require("../../connection/db.connection");
 const fetch = require("node-fetch");
+const {json} = require("sequelize");
 require('dotenv').config();
 
 
@@ -46,6 +47,7 @@ registerUser.on("contact", async (ctx) => {
         let url = `https://multicode.eu/mapi.php?f=McCode_Add&out=json&dt[userID]=23&dt[url]=${targetUrl}&dt[name]=${phoneNum}&`;
         let username = process.env.MULTICODE_LOGIN;
         let password = process.env.MULTICODE_PASSWORD;
+        let userID = process.env.MULTICODE_USERID;
         let qrCode = {};
         await fetch(url, {
             method:'GET',
@@ -55,21 +57,30 @@ registerUser.on("contact", async (ctx) => {
             .then(response => response.json())
             .then(json => {
                 qrCode = json;
+                console.log(qrCode);
             })
-            .catch(await function () {
-                console.log('!!! create QRcode fetch error');
+            .catch(async function (e) {
+                await console.log('!!! create QRcode fetch error');
+                await console.log('**********');
+                await console.log(e);
+                await console.log('**********');
+                await ctx.reply('Упс... Щось пішло не так. Спробуй трохи пізніше');
+                await ctx.scene.leave();
             })
 
         ctx.wizard.state.formData.qrcodeID = qrCode.ID;
 
-        url = `https://multicode.eu/mapi.php?f=McCode_Activate&out=json&dt[qrID]=${qrCode.ID}&dt[activate]=Y`;
+        url = `https://multicode.eu/mapi.php?f=McCode_Activate&out=json&dt[qrID]=${qrCode.ID}&dt[userID]=${userID}&dt[activate]=Y`;
         await fetch(url, {
             method:'GET',
             headers: {
                 'Authorization': 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64')
             }})
-            // .then(response => response.json())
-            .then(response => console.log(`QRcode activation status ${response.status}`))
+            .then(response => {
+                // console.log(response);
+                return response.json();
+            })
+            .then(response => console.log(`QRcode activation status ${response.activate}`))
 
             .catch(async function (e) {
                 await console.log('!!! activate QRcode fetch error');
@@ -107,7 +118,7 @@ registerUser.on("contact", async (ctx) => {
             })
 
 
-        return ctx.scene.leave();
+        return ctx.wizard.next();
     }
     catch (e) {
         console.log(e);
