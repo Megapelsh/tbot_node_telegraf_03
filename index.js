@@ -8,6 +8,7 @@ require("./bot/middleware/command/commands.command");
 require("./bot/middleware/command/start.command");
 require("./bot/middleware/command/help.command");
 require("./bot/middleware/command/setting.command");
+require("./bot/middleware/command/admin.command");
 
 // HEARS
 require("./bot/middleware/hears/one.hears");

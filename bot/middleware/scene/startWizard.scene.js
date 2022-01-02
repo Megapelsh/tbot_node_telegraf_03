@@ -6,6 +6,10 @@ const {json} = require("sequelize");
 require('dotenv').config();
 
 
+const username = process.env.MULTICODE_LOGIN;
+const password = process.env.MULTICODE_PASSWORD;
+const userID = process.env.MULTICODE_USERID;
+
 const startStep = new Composer();
 startStep.start( async (ctx) => {
     try {
@@ -13,6 +17,7 @@ startStep.start( async (ctx) => {
 
         ctx.wizard.state.formData = {};
         ctx.wizard.state.formData.startPayload = ctx.startPayload;
+
 
         const foundUser = await UserModel.findOne({where:{telegram_id:ctx.chat.id}});
 
@@ -28,6 +33,13 @@ startStep.start( async (ctx) => {
             return ctx.wizard.next();
         }
 
+        if (!ctx.startPayload) {
+            await ctx.reply("Обери бажану дію");
+            await ctx.scene.leave();
+        }
+
+        // console.log(foundUser);
+        ctx.wizard.state.formData.user_id = foundUser.id;
         ctx.wizard.state.formData.qrcode = foundUser.qrcode;
         ctx.wizard.state.formData.qrcodeID = foundUser.qrcodeID;
         return ctx.wizard.selectStep(2);
@@ -45,9 +57,7 @@ registerUser.on("contact", async (ctx) => {
 
         let targetUrl = `http://docmyjournal.zorind.com?event=${event}`
         let url = `https://multicode.eu/mapi.php?f=McCode_Add&out=json&dt[userID]=23&dt[url]=${targetUrl}&dt[name]=${phoneNum}&`;
-        let username = process.env.MULTICODE_LOGIN;
-        let password = process.env.MULTICODE_PASSWORD;
-        let userID = process.env.MULTICODE_USERID;
+
         let qrCode = {};
         await fetch(url, {
             method:'GET',
@@ -140,17 +150,20 @@ const finishStep = new Composer();
 // });
 finishStep.hears("ok", async (ctx) => {
     try {
-        let targetUrl = `http://docmyjournal.zorind.com?event=${ctx.wizard.state.formData.startPayload}`;
+        const event = ctx.wizard.state.formData.startPayload ? ctx.wizard.state.formData.startPayload : '***';
+        let targetUrl = `http://docmyjournal.zorind.com?event=${event}`;
         let url = `https://multicode.eu/mapi.php?f=McCode_Update&out=json&dt[userID]=23&dt[qrID]=${ctx.wizard.state.formData.qrcodeID}&dt[url]=${targetUrl}`;
-        let username = process.env.MULTICODE_LOGIN;
-        let password = process.env.MULTICODE_PASSWORD;
+
+        await console.log(ctx.wizard.state.formData.user_id);
         await fetch(url, {
             method:'GET',
             headers: {
                 'Authorization': 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64')
             }})
-            .then(response => console.log(`*** Update Qrcode status: ${response.status}`))
-            .catch(await function () {
+            .then(response => response.json())
+            // .then(response => console.log(response))
+            .then(response => console.log(`*** Update Qrcode ${ctx.wizard.state.formData.qrcodeID} status: ${response}`))
+            .catch(async function () {
                 console.log('!!! update QRcode fetch error');
             })
 
