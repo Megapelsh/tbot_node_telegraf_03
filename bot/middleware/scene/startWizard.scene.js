@@ -3,6 +3,9 @@ const UserModel = require("../../model/user.model");
 const db = require("../../connection/db.connection");
 const fetch = require("node-fetch");
 const {json} = require("sequelize");
+
+const userMainMenu = require("../../keyboard/user.main.kboard");
+
 require('dotenv').config();
 
 
@@ -36,7 +39,7 @@ startStep.start( async (ctx) => {
         if (!ctx.startPayload) {
 
             // await ctx.scene.leave();
-            await ctx.reply("Обери бажану дію");
+            await ctx.reply("Обери бажану дію", userMainMenu);
         }
 
         // console.log(foundUser);
@@ -128,12 +131,13 @@ registerUser.on("contact", async (ctx) => {
                 await console.log('---------------');
             })
 
-
+        await ctx.reply("Обери бажану дію", userMainMenu);
         return ctx.wizard.next();
     }
     catch (e) {
         console.log(e);
     }
+
 });
 
 const finishStep = new Composer();
@@ -150,6 +154,7 @@ const finishStep = new Composer();
 //     }
 // });
 finishStep.hears("ok", async (ctx) => {
+
     try {
         const event = ctx.wizard.state.formData.startPayload ? ctx.wizard.state.formData.startPayload : '***';
         let targetUrl = `http://docmyjournal.zorind.com?event=${event}`;
