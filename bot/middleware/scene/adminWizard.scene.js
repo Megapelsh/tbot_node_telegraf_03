@@ -7,15 +7,7 @@ startStep.command( "admin", async (ctx) => {
     await console.log('adminScene start')
     try {
         ctx.wizard.state.formData = {};
-        // await ctx.reply("adminScene message", {
-        //     reply_markup: {
-        //         "inline_keyboard": [
-        //             [Markup.button.callback("yes-ok", "ok")],
-        //             [Markup.button.callback("changed_my_mind", "changed_my_mind")]
-        //         ]
-        //     }
-        // });
-        await ctx.reply("adminScene message", adminMainMenu);
+        await ctx.reply("Обери бажану дію:", adminMainMenu);
         return ctx.wizard.next();
     } catch (e) {
         console.log(e);

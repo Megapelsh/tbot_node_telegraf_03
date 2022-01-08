@@ -5,6 +5,7 @@ const fetch = require("node-fetch");
 const {json} = require("sequelize");
 
 const userMainMenu = require("../../keyboard/user.main.kboard");
+const getQRpic = require("../../function/getQRpic.func");
 
 require('dotenv').config();
 
@@ -32,14 +33,16 @@ startStep.start( async (ctx) => {
                         request_contact: true
                     }
                 ]
-            ]).oneTime().resize());
+            ])
+                .oneTime()
+                .resize());
             return ctx.wizard.next();
         }
 
         if (!ctx.startPayload) {
 
             // await ctx.scene.leave();
-            await ctx.reply("Обери бажану дію", userMainMenu);
+            await ctx.reply("Обери бажану дію", userMainMenu.resize());
         }
 
         // console.log(foundUser);
@@ -117,21 +120,9 @@ registerUser.on("contact", async (ctx) => {
         });
         await console.log('User added to DB')
 
+        await getQRpic(ctx, qrCode.QR);
 
-        let urlGetQR =`https://multicode.eu/qrCode/?f=p&data=https://dsqr.eu/?q=${qrCode.QR}`;
-        await fetch(urlGetQR)
-            .then(response => {
-                ctx.reply('Твій код:');
-                ctx.replyWithPhoto(response);
-                console.log('pic sent');
-            })
-            .catch(async function (e) {
-                await console.log('!!! get QRcode pic fetch error');
-                await console.log(e);
-                await console.log('---------------');
-            })
-
-        await ctx.reply("Обери бажану дію", userMainMenu);
+        // await ctx.reply('', userMainMenu.resize());
         return ctx.wizard.next();
     }
     catch (e) {

@@ -13,6 +13,8 @@ require("./bot/middleware/command/admin.command");
 // HEARS
 require("./bot/middleware/hears/one.hears");
 require("./bot/middleware/hears/two.hears");
+require("./bot/middleware/hears/qrcode.hears");
+
 
 // ACTION
 
