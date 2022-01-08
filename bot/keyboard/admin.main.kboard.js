@@ -7,9 +7,9 @@ module.exports = {
                 Markup.button.callback("Додати захід", "addEvent"),
                 Markup.button.callback("Поповнити баланс клієнту", "chargeBalance"),
             ],
-            [
-                Markup.button.callback("<<", "back"),
-            ]
+            // [
+            //     Markup.button.callback("<<", "back"),
+            // ]
         ]
     }
 }

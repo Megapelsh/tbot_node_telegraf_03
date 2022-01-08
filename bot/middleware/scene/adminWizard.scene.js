@@ -33,15 +33,15 @@ finishStep.action("chargeBalance", async (ctx) => {
         console.log(e);
     }
 });
-finishStep.action("back", async (ctx) => {
-    try {
-        await ctx.answerCbQuery();
-        await ctx.editMessageText("Обери бажану дію", userMainMenu);
-        return ctx.scene.leave();
-    } catch (e) {
-        console.log(e);
-    }
-});
+// finishStep.action("back", async (ctx) => {
+//     try {
+//         await ctx.answerCbQuery();
+//         await ctx.editMessageText("Обери бажану дію", userMainMenu);
+//         return ctx.scene.leave();
+//     } catch (e) {
+//         console.log(e);
+//     }
+// });
 
 module.exports = new Scenes.WizardScene("adminWizard", startStep, finishStep);
 // module.exports = new Scenes.WizardScene("adminWizard", finishStep);
