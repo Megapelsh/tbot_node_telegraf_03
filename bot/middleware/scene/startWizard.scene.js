@@ -42,7 +42,7 @@ startStep.start( async (ctx) => {
         if (!ctx.startPayload) {
 
             // await ctx.scene.leave();
-            await ctx.reply("Обери бажану дію", userMainMenu.resize());
+            await ctx.reply("Обери бажану дію", userMainMenu);
         }
 
         // console.log(foundUser);

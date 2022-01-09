@@ -22,4 +22,4 @@ const {Markup} = require("telegraf");
 
 module.exports = Markup.keyboard([
     ['Мій QR-код', 'Мій баланс'],
-])
+]).resize()

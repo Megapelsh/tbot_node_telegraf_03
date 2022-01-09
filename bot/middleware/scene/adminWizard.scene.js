@@ -7,6 +7,7 @@ startStep.command( "admin", async (ctx) => {
     await console.log('adminScene start')
     try {
         ctx.wizard.state.formData = {};
+        await ctx.reply("Вхід в адмін-панель виконано", Markup.removeKeyboard());
         await ctx.reply("Обери бажану дію:", adminMainMenu);
         return ctx.wizard.next();
     } catch (e) {
@@ -17,6 +18,7 @@ startStep.command( "admin", async (ctx) => {
 const finishStep = new Composer();
 finishStep.action("addEvent", async (ctx) => {
     try {
+        await ctx.answerCbQuery();
         await ctx.scene.enter("addEventWizard");
         // await ctx.answerCbQuery();
         // await ctx.replyWithHTML("Have you changed your mind!");

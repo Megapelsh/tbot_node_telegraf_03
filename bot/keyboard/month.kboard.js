@@ -22,8 +22,8 @@ module.exports = {
                 Markup.button.callback("Грудень", "грудня"),
             ],
             [
-            Markup.button.callback("Попередній крок", "back"),
-            Markup.button.callback("Скасувати", "cancel"),
+                Markup.button.callback("Попередній крок", "back"),
+                Markup.button.callback("Скасувати", "cancel"),
             ],
         ]
     }
