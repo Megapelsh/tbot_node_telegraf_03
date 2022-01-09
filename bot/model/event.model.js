@@ -14,6 +14,9 @@ module.exports = DATABASE.define('events',{
     starts: {
         type: DataTypes.DATE,
     },
+    place: {
+        type: DataTypes.STRING,
+    },
     price: {
         type: DataTypes.FLOAT,
     },

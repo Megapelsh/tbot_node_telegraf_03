@@ -17,8 +17,9 @@ startStep.command( "admin", async (ctx) => {
 const finishStep = new Composer();
 finishStep.action("addEvent", async (ctx) => {
     try {
-        await ctx.answerCbQuery();
-        await ctx.replyWithHTML("Have you changed your mind!");
+        await ctx.scene.enter("addEventWizard");
+        // await ctx.answerCbQuery();
+        // await ctx.replyWithHTML("Have you changed your mind!");
         return ctx.scene.leave();
     } catch (e) {
         console.log(e);

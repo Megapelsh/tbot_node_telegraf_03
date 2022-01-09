@@ -62,7 +62,7 @@ registerUser.on("contact", async (ctx) => {
         const phoneNum = receivedPhoneNum.replace(/[^0-9]/g, '');
         const event = ctx.wizard.state.formData.startPayload ? ctx.wizard.state.formData.startPayload : '***';
 
-        let targetUrl = `http://docmyjournal.zorind.com?event=${event}`
+        let targetUrl = `http://docmyjournal.zorind.com?event=${event}%26access=disabled`
         let url = `https://multicode.eu/mapi.php?f=McCode_Add&out=json&dt[userID]=23&dt[url]=${targetUrl}&dt[name]=${phoneNum}&`;
 
         let qrCode = {};
