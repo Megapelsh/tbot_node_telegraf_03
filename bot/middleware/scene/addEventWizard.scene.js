@@ -43,8 +43,7 @@ monthStep.action('cancel', async ctx => {
 })
 monthStep.on('callback_query', async (ctx) => {
     try {
-        // await console.log(callbackQuery.message);
-        // await console.log(callbackQuery.data);
+
         await console.log(ctx.update.callback_query.data);
 
         // ctx.wizard.state.formData.eventName = ctx.message.text;
