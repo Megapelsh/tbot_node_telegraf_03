@@ -4,22 +4,22 @@ module.exports = {
     reply_markup: {
         "inline_keyboard": [
             [
-                Markup.button.callback("Січень", "січня"),
-                Markup.button.callback("Лютий", "лютого"),
-                Markup.button.callback("Березень", "березня"),
-                Markup.button.callback("Квітень", "квітня"),
+                Markup.button.callback("Січень", "01"),
+                Markup.button.callback("Лютий", "02"),
+                Markup.button.callback("Березень", "03"),
+                Markup.button.callback("Квітень", "04"),
             ],
             [
-                Markup.button.callback("Травень", "травня"),
-                Markup.button.callback("Червень", "червня"),
-                Markup.button.callback("Липень", "липня"),
-                Markup.button.callback("Серпень", "серпня"),
+                Markup.button.callback("Травень", "05"),
+                Markup.button.callback("Червень", "06"),
+                Markup.button.callback("Липень", "07"),
+                Markup.button.callback("Серпень", "08"),
             ],
             [
-                Markup.button.callback("Вересень", "вересня"),
-                Markup.button.callback("Жовтень", "жовтня"),
-                Markup.button.callback("Листопад", "листопада"),
-                Markup.button.callback("Грудень", "грудня"),
+                Markup.button.callback("Вересень", "09"),
+                Markup.button.callback("Жовтень", "10"),
+                Markup.button.callback("Листопад", "11"),
+                Markup.button.callback("Грудень", "12"),
             ],
             [
                 Markup.button.callback("Попередній крок", "back"),

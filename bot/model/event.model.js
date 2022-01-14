@@ -1,7 +1,9 @@
 const { DataTypes } = require('sequelize');
-const DATABASE = require('./db');
+// const DATABASE = require('./db');
+const db = require("../connection/db.connection");
 
-module.exports = DATABASE.define('events',{
+
+module.exports = db.define('event',{
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
